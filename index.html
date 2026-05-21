@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사내 게임 포털</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="portal">
+    <header class="portal-header">
+      <div class="portal-brand">
+        <span class="portal-logo" aria-hidden="true">▶</span>
+        <div>
+          <h1 class="portal-title">사내 게임 포털</h1>
+          <p class="portal-subtitle">퇴근 전 5분, 가볍게 즐기는 아케이드</p>
+        </div>
+      </div>
+      <div class="portal-header-actions">
+        <div class="portal-stats" id="portalStats" hidden>
+          <div class="stat-pill" id="visitorStat" hidden>
+            <span class="stat-label">방문자</span>
+            <span class="stat-value" id="visitorCount">0</span>
+          </div>
+          <div class="stat-pill" id="playStat" hidden>
+            <span class="stat-label">총 플레이</span>
+            <span class="stat-value" id="totalPlayCount">0</span>
+          </div>
+        </div>
+        <button type="button" class="btn btn-ghost" id="adminOpenBtn" aria-haspopup="dialog">
+          관리자 설정
+        </button>
+      </div>
+    </header>
+
+    <main class="portal-main">
+      <section class="game-section" aria-labelledby="gameSectionTitle">
+        <h2 id="gameSectionTitle" class="section-title">인기 게임</h2>
+        <div class="game-grid" id="gameGrid">
+          <article class="game-card" data-game-id="tetris">
+            <div class="game-card-thumb game-thumb-tetris" aria-hidden="true"></div>
+            <div class="game-card-body">
+              <h3 class="game-card-title">테트리스</h3>
+              <p class="game-card-desc">블록을 맞춰 줄을 없애 보세요.</p>
+              <div class="game-card-meta">
+                <span class="game-tag">퍼즐</span>
+                <span class="game-play-count" data-play-display hidden>
+                  플레이 <strong>0</strong>회
+                </span>
+              </div>
+              <button type="button" class="btn btn-primary game-play-btn">플레이</button>
+            </div>
+          </article>
+
+          <article class="game-card" data-game-id="snake">
+            <div class="game-card-thumb game-thumb-snake" aria-hidden="true"></div>
+            <div class="game-card-body">
+              <h3 class="game-card-title">스네이크</h3>
+              <p class="game-card-desc">사과를 먹으며 뱀을 키워 보세요.</p>
+              <div class="game-card-meta">
+                <span class="game-tag">아케이드</span>
+                <span class="game-play-count" data-play-display hidden>
+                  플레이 <strong>0</strong>회
+                </span>
+              </div>
+              <button type="button" class="btn btn-primary game-play-btn">플레이</button>
+            </div>
+          </article>
+
+          <article class="game-card" data-game-id="breakout">
+            <div class="game-card-thumb game-thumb-breakout" aria-hidden="true"></div>
+            <div class="game-card-body">
+              <h3 class="game-card-title">벽돌깨기</h3>
+              <p class="game-card-desc">패들로 공을 튕겨 벽돌을 부수세요.</p>
+              <div class="game-card-meta">
+                <span class="game-tag">액션</span>
+                <span class="game-play-count" data-play-display hidden>
+                  플레이 <strong>0</strong>회
+                </span>
+              </div>
+              <button type="button" class="btn btn-primary game-play-btn">플레이</button>
+            </div>
+          </article>
+
+          <article class="game-card" data-game-id="memory">
+            <div class="game-card-thumb game-thumb-memory" aria-hidden="true"></div>
+            <div class="game-card-body">
+              <h3 class="game-card-title">카드 맞추기</h3>
+              <p class="game-card-desc">같은 그림의 카드 짝을 찾아 보세요.</p>
+              <div class="game-card-meta">
+                <span class="game-tag">두뇌</span>
+                <span class="game-play-count" data-play-display hidden>
+                  플레이 <strong>0</strong>회
+                </span>
+              </div>
+              <button type="button" class="btn btn-primary game-play-btn">플레이</button>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="portal-footer">
+      <p>© 2026 사내 문화팀 · 내부 이용 전용</p>
+    </footer>
+  </div>
+
+  <div class="modal-backdrop" id="adminModal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="adminModalTitle">
+      <header class="modal-header">
+        <h2 id="adminModalTitle" class="modal-title">관리자 설정</h2>
+        <button type="button" class="btn btn-icon modal-close" id="adminCloseBtn" aria-label="닫기">×</button>
+      </header>
+      <div class="modal-body">
+        <p class="modal-desc">메인 화면에 표시할 통계를 선택하세요. 토글을 켤 때만 수치가 보입니다.</p>
+        <ul class="settings-list">
+          <li class="setting-row">
+            <div class="setting-info">
+              <span class="setting-label">방문자 수 표시</span>
+              <span class="setting-hint">접속할 때마다 누적된 방문 횟수</span>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="toggleVisitor" />
+              <span class="toggle-track" aria-hidden="true"></span>
+            </label>
+          </li>
+          <li class="setting-row">
+            <div class="setting-info">
+              <span class="setting-label">플레이 횟수 표시</span>
+              <span class="setting-hint">게임별·전체 플레이 누적 횟수</span>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="togglePlayCount" />
+              <span class="toggle-track" aria-hidden="true"></span>
+            </label>
+          </li>
+        </ul>
+      </div>
+      <footer class="modal-footer">
+        <button type="button" class="btn btn-primary" id="adminSaveBtn">저장</button>
+      </footer>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
