@@ -127,9 +127,15 @@
     closeModal();
   }
 
-  function onGamePlay(gameId) {
+  function onGamePlay(card) {
+    const gameId = card.dataset.gameId;
     incrementPlayCount(gameId);
     updateStatsDisplay();
+
+    const url = card.dataset.gameUrl;
+    if (url) {
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
   }
 
   function init() {
@@ -153,7 +159,7 @@
       if (!btn) return;
       const card = btn.closest(".game-card");
       if (!card) return;
-      onGamePlay(card.dataset.gameId);
+      onGamePlay(card);
     });
   }
 

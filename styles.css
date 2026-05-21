@@ -199,24 +199,18 @@ body {
   background: var(--bg-elevated);
 }
 
-.game-thumb-tetris {
-  background: linear-gradient(135deg, #238636 0%, #1f6feb 50%, #a371f7 100%);
-  opacity: 0.85;
+.game-thumb-safetyzeromi {
+  background-image: url("https://jdjhzero-design.github.io/safetyzeromi/watermarked_img_693823784582033683.png.png");
+  background-size: cover;
+  background-position: center;
 }
 
-.game-thumb-snake {
-  background: linear-gradient(135deg, #3fb950 0%, #238636 100%);
-  opacity: 0.85;
+.game-card-featured {
+  border-color: rgba(63, 185, 80, 0.35);
 }
 
-.game-thumb-breakout {
-  background: linear-gradient(135deg, #d29922 0%, #f85149 100%);
-  opacity: 0.85;
-}
-
-.game-thumb-memory {
-  background: linear-gradient(135deg, #58a6ff 0%, #a371f7 100%);
-  opacity: 0.85;
+.game-card-featured:hover {
+  border-color: var(--success);
 }
 
 .game-card-body {
