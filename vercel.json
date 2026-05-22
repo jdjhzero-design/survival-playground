@@ -5,6 +5,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/games/safehome", "destination": "/games/safehome/index.html" }
+    { "source": "/games/safehome", "destination": "/games/safehome/index.html" },
+    { "source": "/games/safehome/", "destination": "/games/safehome/index.html" }
   ]
 }
