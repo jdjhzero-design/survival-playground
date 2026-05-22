@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>폭염 타파! 안전한 퇴근길</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-container">
+    <!-- 시작 화면 -->
+    <div id="start-screen" class="screen active">
+      <div class="start-hero">
+        <img src="assets/character-main.png" alt="현장 소장" class="hero-character" id="start-character">
+        <div class="title-box">
+          <h1>폭염 타파!</h1>
+          <h2>안전한 퇴근길</h2>
+          <p class="subtitle">Safe Home in Heatwave</p>
+        </div>
+      </div>
+      <p class="intro">
+        건설·정비 현장의 현장 소장이 되어<br>
+        폭염 경보 속에서 모든 작업자를<br>
+        <strong>오후 6시까지 무사히 퇴근</strong>시키세요!
+      </p>
+      <button id="btn-start" class="btn-primary">현장 관리 시작</button>
+      <div class="rules-preview">
+        <h3>체감온도별 행동요령</h3>
+        <ul class="temp-rules-start">
+          <li><strong>33°C+</strong> 옥외작업 단축·시간대 변경</li>
+          <li><strong>35°C+</strong> 무더위 시간대 옥외작업 중지</li>
+          <li><strong>38°C+</strong> 긴급조치 외 전면 중지</li>
+        </ul>
+        <h3>폭염안전 5대 수칙</h3>
+        <ul class="rules-icons">
+          <li><img src="assets/icon-water.png" alt="" class="rule-icon"> 물·이온음료 수시 섭취</li>
+          <li><img src="assets/icon-ac.png" alt="" class="rule-icon"> 냉방·환기 설비 가동</li>
+          <li><img src="assets/icon-rest.png" alt="" class="rule-icon"> 2시간마다 강제 휴식</li>
+          <li><img src="assets/icon-cooling-vest.png" alt="" class="rule-icon"> 냉방조끼·보호구 착용</li>
+          <li><span class="rule-emoji">🚑</span> 온열질환 골든타임 응급처치</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 메인 게임 화면 -->
+    <div id="game-screen" class="screen">
+      <header id="status-bar">
+        <div class="status-item temp">
+          <span class="label">체감온도</span>
+          <div class="thermo-display">
+            <img src="assets/icon-thermometer.png" alt="온도계" class="thermo-icon" id="thermo-icon">
+            <div class="thermo-info">
+              <span id="temp-value" class="value">33°C</span>
+              <span id="heat-level" class="badge">폭염주의보</span>
+            </div>
+          </div>
+          <div id="temp-scale" class="temp-scale" aria-label="체감온도 단계">
+            <div class="temp-mark" data-stage="0" id="mark-33">
+              <span class="temp-num">33°C</span>
+              <span class="temp-label">주의보</span>
+            </div>
+            <div class="temp-mark" data-stage="1" id="mark-35">
+              <span class="temp-num">35°C</span>
+              <span class="temp-label">경보</span>
+            </div>
+            <div class="temp-mark" data-stage="2" id="mark-38">
+              <span class="temp-num">38°C</span>
+              <span class="temp-label">중대경보</span>
+            </div>
+          </div>
+        </div>
+        <div class="status-item danger">
+          <span class="label">온열질환 위험도</span>
+          <div class="gauge-wrap danger-gauge">
+            <div id="danger-gauge" class="gauge-fill"></div>
+          </div>
+          <span id="danger-value" class="value">0%</span>
+        </div>
+        <div class="status-item time">
+          <span class="label">현장 시간</span>
+          <span id="game-time" class="value large">09:00</span>
+          <span id="stage-msg" class="stage-message"></span>
+        </div>
+      </header>
+
+      <main id="site-area">
+        <div id="stage-overlay"></div>
+        <img src="assets/character-main.png" alt="" class="site-mascot" id="site-mascot" aria-hidden="true">
+        <div id="alert-banner" class="hidden"></div>
+        <aside id="heat-guideline" class="heat-guideline">
+          <div class="guideline-header">
+            <img src="assets/icon-thermometer.png" alt="" class="guideline-icon">
+            <strong id="guideline-title">체감온도 33°C 이상 · 폭염주의보</strong>
+          </div>
+          <p id="guideline-text" class="guideline-text">옥외작업을 단축하거나 시간대를 바꾸세요.</p>
+          <p id="guideline-action" class="guideline-action"></p>
+        </aside>
+        <div id="workers-panel">
+          <h3>작업자 현황 (<span id="worker-count">8</span>명)</h3>
+          <div id="workers-grid"></div>
+        </div>
+        <div id="progress-panel">
+          <span>공정률</span>
+          <div class="progress-bar">
+            <div id="progress-fill"></div>
+          </div>
+          <span id="progress-text">0%</span>
+        </div>
+      </main>
+
+      <footer id="action-bar">
+        <button class="action-btn" id="btn-water">
+          <img src="assets/icon-water.png" alt="" class="btn-img">
+          <span class="name">물 배급</span>
+          <span class="cd"></span>
+        </button>
+        <button class="action-btn" id="btn-ac">
+          <img src="assets/icon-ac.png" alt="" class="btn-img">
+          <span class="name">냉방 가동</span>
+          <span class="cd"></span>
+        </button>
+        <button class="action-btn" id="btn-rest">
+          <img src="assets/icon-rest.png" alt="" class="btn-img">
+          <span class="name">강제 휴식</span>
+          <span class="cd"></span>
+        </button>
+        <button class="action-btn" id="btn-ppe">
+          <img src="assets/icon-cooling-vest.png" alt="" class="btn-img">
+          <span class="name">냉방조끼 지급</span>
+          <span class="cd"></span>
+        </button>
+        <button class="action-btn special hidden" id="btn-stop-outdoor">
+          <span class="icon-emoji">⛔</span>
+          <span class="name">옥외작업 중지</span>
+        </button>
+        <button class="action-btn special hidden" id="btn-full-stop">
+          <span class="icon-emoji">🚨</span>
+          <span class="name">전면 중지</span>
+        </button>
+      </footer>
+    </div>
+
+    <div id="popup-stage-33" class="modal hidden">
+      <div class="modal-content stage-33">
+        <img src="assets/icon-thermometer.png" alt="" class="modal-icon">
+        <h3>체감온도 33°C 이상 · 폭염주의보</h3>
+        <p class="guideline-quote"><strong>옥외작업을 단축하거나 시간대를 바꾸세요.</strong></p>
+        <p class="hint">옥외 작업 시간을 단축하면 위험도가 감소합니다. 2시간마다 강제 휴식도 필수입니다.</p>
+        <div class="modal-buttons">
+          <button class="btn-good" data-choice="shorten">옥외 작업 단축 (권장)</button>
+          <button class="btn-good" data-choice="reschedule">작업 시간대 변경 (권장)</button>
+          <button class="btn-bad" data-choice="continue">현행 유지 (위험 증가)</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="popup-stage-35" class="modal hidden">
+      <div class="modal-content urgent stage-35">
+        <img src="assets/icon-thermometer.png" alt="" class="modal-icon thermo-alert">
+        <h3>체감온도 35°C 이상 · 폭염경보</h3>
+        <p class="guideline-quote"><strong>무더위 시간대, 불가피한 경우 빼고 옥외작업은 중지입니다!</strong></p>
+        <p class="hint">14:00~17:00 무더위 시간대에는 반드시 [옥외작업 중지]를 실행하세요.</p>
+        <button class="btn-primary" id="popup-ack-35">확인</button>
+      </div>
+    </div>
+
+    <div id="popup-stage-38" class="modal hidden">
+      <div class="modal-content urgent stage-38">
+        <img src="assets/icon-thermometer.png" alt="" class="modal-icon thermo-alert">
+        <h3>체감온도 38°C 이상 · 폭염중대경보</h3>
+        <p class="guideline-quote"><strong>긴급조치 작업을 제외한 모든 옥외작업을 즉시 중지.</strong></p>
+        <p class="hint">즉시 [전면 중지]를 선언하고 모든 작업자를 시원한 그늘로 대피하세요!</p>
+        <button class="btn-primary" id="popup-ack-38">전면 중지 준비</button>
+      </div>
+    </div>
+
+    <div id="minigame-screen" class="screen">
+      <div class="minigame-box">
+        <img src="assets/character-fail.png" alt="" class="minigame-character" id="minigame-char">
+        <h2>골든타임 응급처치!</h2>
+        <p id="minigame-worker">작업자가 쓰러졌습니다!</p>
+        <div id="minigame-step-1" class="minigame-step">
+          <p>먼저 <strong>의식</strong>이 있는지 확인하세요.</p>
+          <div class="consciousness-btns">
+            <button class="btn-check" data-conscious="yes">반응 있음 (의식 있음)</button>
+            <button class="btn-check" data-conscious="no">반응 없음 (의식 없음)</button>
+          </div>
+        </div>
+        <div id="minigame-step-unconscious" class="minigame-step hidden">
+          <p class="urgent-text">의식이 없습니다! 즉시 119에 신고하세요!</p>
+          <p class="warn-text">그늘로 옮기거나 물을 먹이면 안 됩니다!</p>
+          <button id="btn-119-spam" class="btn-119">119 신고</button>
+          <div id="spam-timer">1.0초</div>
+          <div id="spam-progress"><div class="spam-fill" id="spam-fill"></div></div>
+        </div>
+        <div id="minigame-step-conscious" class="minigame-step hidden">
+          <div id="conscious-flow">
+            <p id="conscious-instruction">시원한 그늘로 이동시키세요.</p>
+            <div class="conscious-actions">
+              <button id="btn-shade" class="btn-step btn-with-icon">
+                <img src="assets/icon-rest.png" alt="" class="step-icon"> 그늘로 이동
+              </button>
+              <button id="btn-water-patient" class="btn-step btn-with-icon hidden">
+                <img src="assets/icon-water.png" alt="" class="step-icon"> 시원한 물 섭취
+              </button>
+            </div>
+            <div id="symptom-question" class="hidden">
+              <p>증상이 계속 악화되나요?</p>
+              <button class="btn-good" id="btn-call-119">119 호출 (정답)</button>
+              <button class="btn-bad" id="btn-wait">조금 더 지켜보기 (위험)</button>
+            </div>
+          </div>
+        </div>
+        <div id="minigame-result" class="hidden"></div>
+      </div>
+    </div>
+
+    <div id="end-screen" class="screen">
+      <img src="assets/character-success.png" alt="" class="end-character hidden" id="end-character-img">
+      <div id="end-content"></div>
+      <div id="rules-summary" class="hidden">
+        <h3>폭염안전 5대 수칙</h3>
+        <ol>
+          <li><strong>물·이온음료</strong> — 2시간마다 충분히 섭취</li>
+          <li><strong>냉방·환기</strong> — 이동식 에어컨, 선풍기 가동</li>
+          <li><strong>강제 휴식</strong> — 2시간 작업 후 20분 이상 휴식</li>
+          <li><strong>보호구</strong> — 냉각 조끼, 보냉 장구 착용</li>
+          <li><strong>응급처치</strong> — 의식 없으면 즉시 119, 있으면 그늘→물→악화 시 119</li>
+        </ol>
+        <h4>체감온도별 조치</h4>
+        <ul class="temp-rules">
+          <li><strong>33°C+</strong> 옥외작업 단축·시간대 변경</li>
+          <li><strong>35°C+</strong> 무더위 시간대 옥외작업 중지</li>
+          <li><strong>38°C+</strong> 긴급조치 외 전면 중지·대피</li>
+        </ul>
+      </div>
+      <button id="btn-retry" class="btn-primary">다시 도전</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

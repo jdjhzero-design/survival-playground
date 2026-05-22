@@ -205,6 +205,12 @@ body {
   background-position: center;
 }
 
+.game-thumb-safehome {
+  background-image: url("games/safehome/assets/character-main.png");
+  background-size: cover;
+  background-position: center top;
+}
+
 .game-card-featured {
   border-color: rgba(63, 185, 80, 0.35);
 }
