@@ -73,11 +73,23 @@
   }
 
   function getSettings() {
-    return { ...DEFAULT_SETTINGS, ...readJSON(STORAGE_KEYS.settings, {}) };
+    const raw = readJSON(STORAGE_KEYS.settings, {});
+    return {
+      showVisitor: raw.showVisitor === true,
+      showPlayCount: raw.showPlayCount === true,
+    };
   }
 
   function saveSettings(settings) {
-    writeJSON(STORAGE_KEYS.settings, settings);
+    writeJSON(STORAGE_KEYS.settings, {
+      showVisitor: settings.showVisitor === true,
+      showPlayCount: settings.showPlayCount === true,
+    });
+  }
+
+  function setElementVisible(el, visible) {
+    if (!el) return;
+    el.hidden = !visible;
   }
 
   function updateStatsDisplay() {
@@ -90,9 +102,9 @@
     els.totalPlayCount.textContent = String(totalPlays);
 
     const showAny = settings.showVisitor || settings.showPlayCount;
-    els.portalStats.hidden = !showAny;
-    els.visitorStat.hidden = !settings.showVisitor;
-    els.playStat.hidden = !settings.showPlayCount;
+    setElementVisible(els.portalStats, showAny);
+    setElementVisible(els.visitorStat, settings.showVisitor);
+    setElementVisible(els.playStat, settings.showPlayCount);
 
     document.querySelectorAll(".game-card").forEach((card) => {
       const gameId = card.dataset.gameId;
@@ -100,7 +112,7 @@
       const count = playCounts[gameId] || 0;
       if (display) {
         display.querySelector("strong").textContent = String(count);
-        display.hidden = !settings.showPlayCount;
+        setElementVisible(display, settings.showPlayCount);
       }
     });
   }
@@ -139,6 +151,7 @@
   }
 
   function init() {
+    updateStatsDisplay();
     incrementVisitorCount();
     updateStatsDisplay();
 

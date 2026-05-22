@@ -87,9 +87,15 @@ body {
   gap: 0.75rem;
 }
 
-.portal-stats {
+.portal-stats:not([hidden]) {
   display: flex;
   gap: 0.5rem;
+}
+
+.portal-stats[hidden],
+.stat-pill[hidden],
+.game-play-count[hidden] {
+  display: none !important;
 }
 
 .stat-pill {
