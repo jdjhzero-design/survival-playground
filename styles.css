@@ -174,8 +174,14 @@ body {
 
 .game-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: 1fr;
   gap: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .game-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .game-card {
@@ -195,8 +201,23 @@ body {
 }
 
 .game-card-thumb {
-  height: 120px;
+  position: relative;
+  height: 140px;
   background: var(--bg-elevated);
+}
+
+.game-badge-new {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #fff;
+  background: linear-gradient(135deg, #e85d04, #ff8c42);
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(232, 93, 4, 0.45);
 }
 
 .game-thumb-safetyzeromi {
@@ -217,6 +238,15 @@ body {
 
 .game-card-featured:hover {
   border-color: var(--success);
+}
+
+.game-card-safehome {
+  border-color: rgba(255, 140, 66, 0.4);
+}
+
+.game-card-safehome:hover {
+  border-color: #ff8c42;
+  box-shadow: 0 8px 24px rgba(255, 140, 66, 0.2);
 }
 
 .game-card-body {
