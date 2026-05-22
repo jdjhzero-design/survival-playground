@@ -1,4 +1,10 @@
 {
+  "version": 2,
   "buildCommand": null,
-  "outputDirectory": "."
+  "outputDirectory": ".",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/games/safehome", "destination": "/games/safehome/index.html" }
+  ]
 }
