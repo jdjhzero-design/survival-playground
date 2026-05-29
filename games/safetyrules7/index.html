@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <meta name="description" content="현장 근로자를 위한 산업안전 7단계 교육 퀴즈 게임" />
+    <title>안전 패스 퀘스트 — 7단계 현장 안전 게임</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              safe: '#059669',
+              'safe-dark': '#047857',
+              danger: '#dc2626',
+              'danger-dark': '#b91c1c',
+              warm: '#fffbeb',
+              ink: '#1c1917',
+            },
+            fontSize: {
+              'title-xl': ['2rem', { lineHeight: '1.3', fontWeight: '800' }],
+              'body-lg': ['1.25rem', { lineHeight: '1.65' }],
+              'btn-lg': ['1.5rem', { lineHeight: '1.4', fontWeight: '700' }],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap');
+
+      * {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        font-family: 'Noto Sans KR', system-ui, sans-serif;
+        background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 40%, #fde68a 100%);
+        min-height: 100vh;
+        color: #1c1917;
+      }
+
+      .tts-readable {
+        speak-as: normal;
+      }
+
+      .btn-safe {
+        background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+        color: #fff;
+        border: 4px solid #047857;
+        box-shadow: 0 6px 0 #047857;
+      }
+
+      .btn-safe:active {
+        transform: translateY(4px);
+        box-shadow: 0 2px 0 #047857;
+      }
+
+      .btn-danger-choice {
+        background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+        color: #fff;
+        border: 4px solid #b91c1c;
+        box-shadow: 0 6px 0 #b91c1c;
+      }
+
+      .btn-danger-choice:active {
+        transform: translateY(4px);
+        box-shadow: 0 2px 0 #b91c1c;
+      }
+
+      .btn-primary-action {
+        background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
+        color: #1c1917;
+        border: 4px solid #b45309;
+        box-shadow: 0 6px 0 #b45309;
+      }
+
+      .btn-primary-action:active {
+        transform: translateY(4px);
+        box-shadow: 0 2px 0 #b45309;
+      }
+
+      .btn-youtube {
+        background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+        color: #fff;
+        border: 4px solid #b91c1c;
+        box-shadow: 0 6px 0 #991b1b;
+      }
+
+      .btn-youtube:active {
+        transform: translateY(4px);
+        box-shadow: 0 2px 0 #991b1b;
+      }
+
+      .btn-youtube-done {
+        background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
+        border-color: #15803d;
+        box-shadow: 0 6px 0 #15803d;
+        cursor: default;
+      }
+
+      .btn-start-disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+        filter: grayscale(0.4);
+        pointer-events: none;
+      }
+
+      .youtube-mission-box {
+        background: linear-gradient(135deg, #fef2f2 0%, #fff7ed 100%);
+        border: 3px solid #fca5a5;
+      }
+
+      .start-tabs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .start-tab {
+        padding: 0.85rem 0.5rem;
+        border-radius: 1rem 1rem 0 0;
+        border: 3px solid #d6d3d1;
+        border-bottom: none;
+        background: #f5f5f4;
+        color: #57534e;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+        line-height: 1.35;
+      }
+
+      @media (min-width: 480px) {
+        .start-tab {
+          font-size: 1.15rem;
+          padding: 1rem 0.75rem;
+        }
+      }
+
+      .start-tab.active {
+        background: #fff;
+        color: #1c1917;
+        border-color: #f59e0b;
+        border-bottom: 3px solid #fff;
+        margin-bottom: -3px;
+        z-index: 1;
+        position: relative;
+      }
+
+      .start-tab-panel {
+        display: none;
+        border: 3px solid #f59e0b;
+        border-radius: 0 0 1rem 1rem;
+        padding: 1.25rem;
+        background: #fff;
+        margin-bottom: 1rem;
+      }
+
+      .start-tab-panel.active {
+        display: block;
+      }
+
+      .screen-panel {
+        display: none;
+      }
+
+      .screen-panel.active {
+        display: block;
+        animation: panelIn 0.35s ease;
+      }
+
+      @keyframes panelIn {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes popIn {
+        0% {
+          transform: scale(0.85);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .result-popup.show {
+        display: flex;
+        animation: popIn 0.3s ease;
+      }
+
+      .learn-bullet::before {
+        content: '✓';
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        min-width: 2rem;
+        background: #059669;
+        color: white;
+        border-radius: 50%;
+        font-weight: 800;
+        margin-right: 0.75rem;
+        font-size: 1rem;
+      }
+
+      .stage-dots .dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #d6d3d1;
+        border: 2px solid #a8a29e;
+      }
+
+      .stage-dots .dot.done {
+        background: #059669;
+        border-color: #047857;
+      }
+
+      .stage-dots .dot.current {
+        background: #f59e0b;
+        border-color: #d97706;
+        transform: scale(1.25);
+      }
+
+      @media (min-width: 640px) {
+        .text-title-main {
+          font-size: 2.25rem;
+        }
+        .text-body-main {
+          font-size: 1.35rem;
+        }
+        .text-btn-main {
+          font-size: 1.6rem;
+        }
+      }
+    </style>
+  </head>
+  <body class="antialiased">
+    <!-- 접근성: 스크린리더용 라이브 영역 -->
+    <div id="aria-live-region" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+    <div class="max-w-2xl mx-auto px-4 py-6 sm:py-10">
+      <!-- ===== 홈 / 시작 ===== -->
+      <section
+        id="screen-home"
+        class="screen-panel active text-center"
+        role="main"
+        aria-label="게임 시작 화면"
+      >
+        <div class="bg-white rounded-3xl shadow-xl border-4 border-amber-200 p-8 sm:p-10">
+          <p class="text-4xl mb-3" aria-hidden="true">🛡️</p>
+          <h1 class="text-title-main text-3xl sm:text-4xl font-extrabold text-ink mb-3 tts-readable">
+            안전 패스 퀘스트
+          </h1>
+          <p class="text-body-main text-xl sm:text-2xl text-stone-600 mb-4 tts-readable leading-relaxed">
+            7단계 현장 안전 수칙을<br />눈도장 공부하고 단계별 퀴즈 2문제에 도전하세요!
+          </p>
+          <p class="text-lg sm:text-xl text-amber-800 font-semibold mb-6 tts-readable">
+            ↺ 처음부터 다시하기를 누르면 다른 문제 세트로 바뀝니다
+          </p>
+
+          <div class="start-mode-picker" role="presentation">
+            <div class="start-tabs" role="tablist" aria-label="게임 시작 방법 선택">
+              <button
+                type="button"
+                id="tab-subscribe"
+                class="start-tab tts-readable"
+                role="tab"
+                aria-selected="false"
+                aria-controls="panel-subscribe"
+              >
+                📺 구독하고<br />게임하기
+              </button>
+              <button
+                type="button"
+                id="tab-direct"
+                class="start-tab active tts-readable"
+                role="tab"
+                aria-selected="true"
+                aria-controls="panel-direct"
+              >
+                ▶ 그냥<br />게임하기
+              </button>
+            </div>
+
+            <div
+              id="panel-subscribe"
+              class="start-tab-panel text-left"
+              role="tabpanel"
+              aria-labelledby="tab-subscribe"
+              hidden
+            >
+              <div
+                class="youtube-mission-box rounded-2xl p-5 sm:p-6 mb-4"
+                role="region"
+                aria-label="안전파수꾼제로미 유튜브 구독"
+              >
+                <p class="text-body-main text-lg sm:text-xl text-red-900 leading-relaxed mb-4 tts-readable">
+                  반장님! 작업 전 영상으로 먼저 배우는 <strong>'안전파수꾼 제로미'</strong> 유튜브를
+                  구독하시면 <strong class="text-red-700">안전 점수 10점</strong>을 먼저 드립니다!
+                </p>
+                <button
+                  type="button"
+                  id="btn-youtube-subscribe"
+                  class="btn-youtube w-full rounded-2xl py-4 px-4 text-xl sm:text-2xl font-bold tts-readable"
+                  aria-label="안전파수꾼제로미 유튜브 구독하기, 새 창"
+                >
+                  📺 안전파수꾼제로미 유튜브 구독하기
+                </button>
+                <p
+                  id="youtube-mission-status"
+                  class="text-center text-lg font-bold text-stone-500 mt-3 tts-readable"
+                  aria-live="polite"
+                ></p>
+              </div>
+              <button
+                type="button"
+                id="btn-start-with-subscribe"
+                class="btn-primary-action w-full rounded-2xl py-5 px-6 text-2xl sm:text-3xl font-bold tts-readable"
+                aria-label="구독하고 게임 시작하기"
+              >
+                ▶ 구독하고 게임 시작하기
+              </button>
+              <p id="subscribe-start-hint" class="text-base text-stone-500 mt-2 text-center tts-readable">
+                유튜브 구독 확인 후 시작하시면 보너스 10점!
+              </p>
+            </div>
+
+            <div
+              id="panel-direct"
+              class="start-tab-panel active text-center"
+              role="tabpanel"
+              aria-labelledby="tab-direct"
+            >
+              <p class="text-body-main text-xl sm:text-2xl text-stone-600 mb-6 tts-readable leading-relaxed">
+                구독 없이 바로<br />안전 퀴즈에 도전합니다!
+              </p>
+              <button
+                type="button"
+                id="btn-start-direct"
+                class="btn-primary-action w-full rounded-2xl py-5 px-6 text-2xl sm:text-3xl font-bold tts-readable"
+                aria-label="그냥 게임하기, 바로 시작"
+              >
+                ▶ 바로 게임 시작하기
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 학습 화면: 눈도장 공부방 ===== -->
+      <section
+        id="screen-learn"
+        class="screen-panel"
+        role="main"
+        aria-label="눈도장 공부방 학습 화면"
+      >
+        <header class="text-center mb-5">
+          <p
+            id="learn-stage-label"
+            class="text-lg sm:text-xl font-bold text-amber-700 mb-1 tts-readable"
+          ></p>
+          <h2
+            id="learn-stage-title"
+            class="text-title-main text-3xl sm:text-4xl font-extrabold text-ink tts-readable"
+          ></h2>
+          <p class="text-xl sm:text-2xl text-emerald-700 font-bold mt-2 tts-readable">
+            📖 눈도장 공부방
+          </p>
+        </header>
+
+        <div
+          class="stage-dots flex justify-center gap-2 mb-6"
+          id="stage-dots"
+          role="progressbar"
+          aria-label="진행 단계"
+        ></div>
+
+        <div class="bg-white rounded-3xl shadow-xl border-4 border-emerald-200 p-6 sm:p-8 mb-8">
+          <ul
+            id="learn-bullets"
+            class="space-y-5 text-body-main text-xl sm:text-2xl text-ink tts-readable"
+            role="list"
+            aria-label="핵심 안전 수칙 목록"
+          ></ul>
+        </div>
+
+        <button
+          type="button"
+          id="btn-to-quiz"
+          class="btn-primary-action w-full rounded-2xl py-5 px-6 text-btn-main text-2xl sm:text-3xl font-bold tts-readable"
+          aria-label="이해했습니다, 퀴즈 도전하기"
+        >
+          이해했습니다! 퀴즈 도전하기 →
+        </button>
+      </section>
+
+      <!-- ===== 퀴즈 화면: 실전 패스 퀴즈 ===== -->
+      <section
+        id="screen-quiz"
+        class="screen-panel"
+        role="main"
+        aria-label="실전 패스 퀴즈 화면"
+      >
+        <header class="text-center mb-5">
+          <p
+            id="quiz-stage-label"
+            class="text-lg sm:text-xl font-bold text-amber-700 mb-1 tts-readable"
+          ></p>
+          <h2
+            id="quiz-stage-title"
+            class="text-title-main text-3xl sm:text-4xl font-extrabold text-ink tts-readable"
+          ></h2>
+          <p class="text-xl sm:text-2xl text-blue-800 font-bold mt-2 tts-readable">
+            ⚡ 실전 패스 퀴즈
+          </p>
+          <p
+            id="quiz-level-badge"
+            class="inline-block mt-3 px-4 py-1 rounded-full text-lg sm:text-xl font-bold tts-readable"
+          ></p>
+          <p
+            id="quiz-set-badge"
+            class="text-base sm:text-lg text-stone-500 mt-2 tts-readable"
+          ></p>
+        </header>
+
+        <div class="bg-white rounded-3xl shadow-xl border-4 border-blue-200 p-6 sm:p-8 mb-6">
+          <p class="text-lg sm:text-xl font-bold text-stone-500 mb-3 tts-readable">현장 상황</p>
+          <p
+            id="quiz-scenario"
+            class="text-body-main text-xl sm:text-2xl text-ink leading-relaxed tts-readable quiz-scenario-text"
+            role="article"
+            aria-label="퀴즈 상황 설명"
+          ></p>
+        </div>
+
+        <p class="text-center text-xl sm:text-2xl font-bold text-stone-700 mb-4 tts-readable">
+          이 상황, 안전한가요?
+        </p>
+
+        <div class="grid grid-cols-1 gap-4" role="group" aria-label="안전 판단 선택">
+          <button
+            type="button"
+            id="btn-choice-pass"
+            class="btn-safe w-full rounded-2xl py-6 px-4 text-btn-main text-2xl sm:text-3xl font-bold tts-readable quiz-choice-pass"
+            aria-label="안전 패스 선택"
+          >
+            🟢 안전 패스
+          </button>
+          <button
+            type="button"
+            id="btn-choice-fix"
+            class="btn-danger-choice w-full rounded-2xl py-6 px-4 text-btn-main text-2xl sm:text-3xl font-bold tts-readable quiz-choice-fix"
+            aria-label="안전 보완 필요 선택"
+          >
+            🔴 안전 보완 필요
+          </button>
+        </div>
+      </section>
+
+      <!-- ===== 결과 팝업 ===== -->
+      <div
+        id="result-popup"
+        class="result-popup fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="result-heading"
+      >
+        <div
+          class="bg-white rounded-3xl border-4 max-w-lg w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto"
+          id="result-card"
+        >
+          <p
+            id="result-emoji"
+            class="text-5xl sm:text-6xl text-center mb-3"
+            aria-hidden="true"
+          ></p>
+          <h3
+            id="result-heading"
+            class="text-3xl sm:text-4xl font-extrabold text-center mb-4 tts-readable result-heading-text"
+          ></h3>
+          <p
+            id="result-explanation"
+            class="text-body-main text-xl sm:text-2xl text-stone-800 leading-relaxed mb-8 tts-readable result-explanation-text"
+            role="status"
+          ></p>
+          <button
+            type="button"
+            id="btn-next-stage"
+            class="btn-primary-action w-full rounded-2xl py-5 px-6 text-btn-main text-2xl sm:text-3xl font-bold tts-readable"
+            aria-label="다음 단계로 가기"
+          >
+            다음 단계로 가기 →
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== 최종 보상 화면 ===== -->
+      <section
+        id="screen-final"
+        class="screen-panel text-center"
+        role="main"
+        aria-label="최종 보상 화면"
+      >
+        <div
+          class="bg-gradient-to-b from-amber-100 to-yellow-200 rounded-3xl shadow-2xl border-4 border-amber-400 p-8 sm:p-12"
+        >
+          <p class="text-6xl sm:text-7xl mb-4" aria-hidden="true">🏆</p>
+          <h2
+            class="text-title-main text-3xl sm:text-4xl font-extrabold text-ink mb-6 tts-readable final-title-text"
+          >
+            대한민국 1등 명예 안전소장 등극!
+          </h2>
+          <p
+            class="text-body-main text-xl sm:text-2xl text-stone-800 leading-relaxed mb-8 tts-readable final-subtext"
+          >
+            현장의 영웅 김반장님! 7단계 14문제를 모두 맞히고<br />
+            모든 대원을 무사히 퇴근시키셨습니다. 오늘 현장도 <strong class="text-emerald-700">안전 패스</strong>!
+          </p>
+          <a
+            id="btn-youtube-final"
+            href="https://www.youtube.com/@withZeromi"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-youtube inline-block w-full rounded-2xl py-5 px-6 text-btn-main text-xl sm:text-2xl font-bold tts-readable mb-4 no-underline"
+            aria-label="현장 안전 영상 더 보기, 유튜브 새 창"
+          >
+            📺 현장 안전 영상 더 보기 (유튜브)
+          </a>
+          <button
+            type="button"
+            id="btn-restart"
+            class="btn-primary-action w-full rounded-2xl py-5 px-6 text-btn-main text-2xl sm:text-3xl font-bold tts-readable"
+            aria-label="처음부터 다시 하기"
+          >
+            처음부터 다시 하기 ↺
+          </button>
+        </div>
+      </section>
+
+      <!-- ===== 미완료 종료 (7단계 후 일부 오답) ===== -->
+      <section
+        id="screen-incomplete"
+        class="screen-panel text-center"
+        role="main"
+        aria-label="복습 안내 화면"
+      >
+        <div class="bg-white rounded-3xl shadow-xl border-4 border-red-200 p-8 sm:p-10">
+          <p class="text-5xl mb-4" aria-hidden="true">🔔</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-danger mb-4 tts-readable">
+            어허, 다시 확인!
+          </h2>
+          <p
+            id="incomplete-message"
+            class="text-body-main text-xl sm:text-2xl text-stone-700 mb-8 tts-readable"
+          ></p>
+          <button
+            type="button"
+            id="btn-retry-all"
+            class="btn-primary-action w-full rounded-2xl py-5 px-6 text-btn-main text-2xl sm:text-3xl font-bold tts-readable"
+          >
+            처음부터 다시 하기 ↺
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <footer class="text-center py-6 text-stone-500 text-lg">
+      <p>산업재해 예방 · 현장 안전문화 교육용</p>
+    </footer>
+
+    <script src="js/quiz-sets.js"></script>
+    <script>
+      /**
+       * 안전 패스 퀘스트 — 7단계 SPA
+       * 단계당 퀴즈 2문제(기본 + 심화), 재시작 시 문제 세트 교체
+       */
+      const PLAYTHROUGH_KEY = 'safetyrules7_quiz_set';
+      const YOUTUBE_MISSION_KEY = 'safetyrules7_youtube_mission';
+      const YOUTUBE_CHANNEL_URL = 'https://www.youtube.com/@withZeromi';
+
+      const youtubeMission = {
+        pendingReturn: false,
+        completed: false,
+      };
+      const STAGE_DEFS = [
+        {
+          id: 1,
+          label: '1단계',
+          title: '아침을 여는 10분 (TBM)',
+          learn: [
+            '① 오늘 할 일 범위 확인',
+            '② 낙하·추락·감전 등 위험 요인 미리 찾기',
+            '③ 보호구 착용 점검',
+            '④ 근로자 몸 상태 및 음주 여부 확인',
+            '⑤ 일지 쓰고 현장 사진 찍기',
+          ],
+        },
+        {
+          id: 2,
+          label: '2단계',
+          title: '하늘 위 안전선 (달비계)',
+          learn: [
+            '① 반드시 견고한 고정점 \'2개소 이상\'에 분리 결속',
+            '② 로프 길이는 지면까지 닿는 적정 길이 사용',
+            '③ 마모된 로프 사용 절대 금지',
+            '④ 내 몸을 지켜줄 \'별도의 수직구명줄\' 설치 및 안전대 결속',
+          ],
+        },
+        {
+          id: 3,
+          label: '3단계',
+          title: '맑은 공기 사수 (밀폐공간)',
+          learn: [
+            '① 들어가기 전 산소(18%~23.5% 미만) 및 유해가스 농도 측정',
+            '② 작업 전은 물론 작업 중에도 계속 환기팬 가동',
+            '③ 공기호흡기나 송기마스크 착용 필수!',
+          ],
+        },
+        {
+          id: 4,
+          label: '4단계',
+          title: '지붕 위 생명길 (지붕수리)',
+          learn: [
+            '① 고소작업대 등을 활용해 지붕 밑에서 작업할 수 있는지 먼저 확인',
+            '② 지붕 가장자리 안전난간 또는 추락방호망 설치',
+            '③ \'작업통로용 발판\'과 채광창 \'안전덮개\' 설치',
+            '④ 안전대와 안전모 착용 필수!',
+          ],
+        },
+        {
+          id: 5,
+          label: '5단계',
+          title: '폭염 타파! (온열질환)',
+          learn: [
+            '① 시원하고 깨끗한 물과 보냉장구 상시 지급',
+            '② 냉방장치 및 시원한 그늘막 설치',
+            '③ 체감온도 31도 이상 시 적절한 휴식, 33도 이상 시 \'매 2시간 내에 20분씩\' 강제 휴식!',
+            '④ 환자 발생 시 즉시 119 신고!',
+          ],
+        },
+        {
+          id: 6,
+          label: '6단계',
+          title: '올바른 디딤발 (이동식 사다리)',
+          learn: [
+            '① 고소작업대 설치가 어려운 협소한 장소에서만 사용',
+            '② 바닥면 높이 3.5m 이하 장소에서만 작업',
+            '③ 평탄하고 견고한 바닥에 3개 이상의 버팀대 설치',
+            '④ 높이 1m 초과 시 \'최상부 발판 및 하단 디딤대 작업 금지\'',
+            '⑤ 안전모(턱끈 조이기) 및 안전대 필수!',
+          ],
+        },
+        {
+          id: 7,
+          label: '7단계',
+          title: '15미터 세이프존 (예초기)',
+          learn: [
+            '① 사전에 돌, 이물질 제거 및 날 손상 점검',
+            '② 예초날은 항상 허벅지 이하 높이 유지',
+            '③ 보호안경, 보호대 착용 필수',
+            '④ 작업 중 다른 사람과 \'15m 이상 거리두기\'',
+            '⑤ 사람이 접근하면 즉시 엔진 정지!',
+          ],
+        },
+      ];
+
+      let STAGES = [];
+      let TOTAL_QUIZZES = STAGE_DEFS.length * 2;
+
+      function withQuizLabels(quiz) {
+        return {
+          ...quiz,
+          levelLabel: quiz.level === 'basic' ? '기본 문제 1/2' : '심화 문제 2/2',
+        };
+      }
+
+      function getStoredQuizSetIndex() {
+        const n = parseInt(localStorage.getItem(PLAYTHROUGH_KEY) || '0', 10);
+        return Number.isFinite(n) ? n : 0;
+      }
+
+      function applyQuizSet(setIndex) {
+        const idx = setIndex % QUIZ_SETS.length;
+        const set = QUIZ_SETS[idx];
+        STAGES = STAGE_DEFS.map((def, i) => ({
+          ...def,
+          quizzes: set[i].map(withQuizLabels),
+        }));
+        state.quizSetIndex = idx;
+        TOTAL_QUIZZES = STAGES.length * 2;
+        return idx;
+      }
+
+      function rotateQuizSetForRestart() {
+        const next = (getStoredQuizSetIndex() + 1) % QUIZ_SETS.length;
+        localStorage.setItem(PLAYTHROUGH_KEY, String(next));
+        return applyQuizSet(next);
+      }
+
+      const state = {
+        screen: 'home',
+        currentStage: 0,
+        currentQuizIndex: 0,
+        quizSetIndex: 0,
+        quizResults: STAGE_DEFS.map(() => [null, null]),
+        lastAnswerCorrect: false,
+        safetyBonusPoints: 0,
+      };
+
+      function getCurrentQuiz() {
+        return STAGES[state.currentStage].quizzes[state.currentQuizIndex];
+      }
+
+      const $ = (id) => document.getElementById(id);
+
+      function announce(msg) {
+        const live = $('aria-live-region');
+        if (live) {
+          live.textContent = '';
+          requestAnimationFrame(() => {
+            live.textContent = msg;
+          });
+        }
+      }
+
+      function showScreen(name) {
+        state.screen = name;
+        document.querySelectorAll('.screen-panel').forEach((el) => el.classList.remove('active'));
+        const target = $('screen-' + name);
+        if (target) target.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function renderStageDots() {
+        const dots = $('stage-dots');
+        dots.innerHTML = STAGES.map((_, i) => {
+          let cls = 'dot';
+          if (i < state.currentStage) cls += ' done';
+          if (i === state.currentStage) cls += ' current';
+          return `<span class="${cls}" aria-hidden="true"></span>`;
+        }).join('');
+        dots.setAttribute(
+          'aria-valuenow',
+          String(state.currentStage + 1)
+        );
+        dots.setAttribute('aria-valuemin', '1');
+        dots.setAttribute('aria-valuemax', '7');
+      }
+
+      function renderLearn() {
+        const stage = STAGES[state.currentStage];
+        $('learn-stage-label').textContent = stage.label;
+        $('learn-stage-title').textContent = stage.title;
+        $('learn-bullets').innerHTML = stage.learn
+          .map(
+            (item) =>
+              `<li class="flex items-start learn-bullet tts-readable" role="listitem">${item}</li>`
+          )
+          .join('');
+        renderStageDots();
+        announce(`${stage.label} ${stage.title} 학습 화면입니다.`);
+      }
+
+      function renderQuiz() {
+        const stage = STAGES[state.currentStage];
+        const quiz = getCurrentQuiz();
+        $('quiz-stage-label').textContent = stage.label;
+        $('quiz-stage-title').textContent = stage.title;
+        $('quiz-scenario').textContent = quiz.scenario;
+
+        const badge = $('quiz-level-badge');
+        badge.textContent = quiz.levelLabel;
+        if (quiz.level === 'hard') {
+          badge.className =
+            'inline-block mt-3 px-4 py-1 rounded-full text-lg sm:text-xl font-bold tts-readable bg-purple-100 text-purple-900 border-2 border-purple-400';
+        } else {
+          badge.className =
+            'inline-block mt-3 px-4 py-1 rounded-full text-lg sm:text-xl font-bold tts-readable bg-blue-100 text-blue-900 border-2 border-blue-300';
+        }
+
+        const setNames = ['A', 'B', 'C'];
+        $('quiz-set-badge').textContent =
+          '문제 세트 ' + (setNames[state.quizSetIndex] || state.quizSetIndex + 1);
+        announce(`${stage.label} ${quiz.levelLabel}. ${quiz.scenario}`);
+      }
+
+      function showResultPopup(isCorrect) {
+        const quiz = getCurrentQuiz();
+        const popup = $('result-popup');
+        const card = $('result-card');
+
+        state.lastAnswerCorrect = isCorrect;
+        state.quizResults[state.currentStage][state.currentQuizIndex] = isCorrect;
+
+        if (isCorrect) {
+          $('result-emoji').textContent = '🎉';
+          $('result-heading').textContent =
+            quiz.level === 'hard' ? '딩동댕! 심화 문제 정답!' : '딩동댕! 정답입니다!';
+          $('result-heading').className =
+            'text-3xl sm:text-4xl font-extrabold text-center mb-4 tts-readable result-heading-text text-emerald-700';
+          card.className =
+            'bg-white rounded-3xl border-4 border-emerald-500 max-w-lg w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto';
+          announce('딩동댕! 정답입니다!');
+        } else {
+          $('result-emoji').textContent = '🔔';
+          $('result-heading').textContent =
+            quiz.level === 'hard' ? '어허, 심화 문제 다시 확인!' : '어허, 다시 확인!';
+          $('result-heading').className =
+            'text-3xl sm:text-4xl font-extrabold text-center mb-4 tts-readable result-heading-text text-red-600';
+          card.className =
+            'bg-white rounded-3xl border-4 border-red-400 max-w-lg w-full p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto';
+          announce('어허, 다시 확인!');
+        }
+
+        $('result-explanation').textContent = quiz.explanation;
+
+        const isLastStage = state.currentStage >= STAGES.length - 1;
+        const isLastQuizInStage = state.currentQuizIndex >= 1;
+
+        if (!isLastQuizInStage) {
+          $('btn-next-stage').textContent = '심화 문제 도전하기 →';
+        } else if (!isLastStage) {
+          $('btn-next-stage').textContent = '다음 단계로 가기 →';
+        } else {
+          $('btn-next-stage').textContent = '결과 확인하기 →';
+        }
+
+        popup.classList.add('show');
+        popup.style.display = 'flex';
+      }
+
+      function hideResultPopup() {
+        const popup = $('result-popup');
+        popup.classList.remove('show');
+        popup.style.display = 'none';
+      }
+
+      function goToLearn(stageIndex) {
+        state.currentStage = stageIndex;
+        state.currentQuizIndex = 0;
+        renderLearn();
+        showScreen('learn');
+      }
+
+      function startGame(useNextSet) {
+        if (useNextSet) {
+          const setIdx = rotateQuizSetForRestart();
+          announce(`새로운 문제 세트 ${String.fromCharCode(65 + setIdx)}로 시작합니다.`);
+        } else {
+          applyQuizSet(getStoredQuizSetIndex());
+        }
+        state.currentStage = 0;
+        state.currentQuizIndex = 0;
+        state.quizResults = STAGE_DEFS.map(() => [null, null]);
+        goToLearn(0);
+      }
+
+      function handleQuizChoice(choice) {
+        const quiz = getCurrentQuiz();
+        const isCorrect = choice === quiz.correct;
+        showResultPopup(isCorrect);
+      }
+
+      function countWrongAnswers() {
+        let wrong = 0;
+        state.quizResults.forEach((stageRes) => {
+          stageRes.forEach((r) => {
+            if (r === false) wrong++;
+          });
+        });
+        return wrong;
+      }
+
+      function allQuizzesCorrect() {
+        return state.quizResults.every((stageRes) => stageRes.every((r) => r === true));
+      }
+
+      function advanceAfterResult() {
+        hideResultPopup();
+
+        if (state.currentQuizIndex < 1) {
+          state.currentQuizIndex = 1;
+          renderQuiz();
+          showScreen('quiz');
+          return;
+        }
+
+        if (state.currentStage < STAGES.length - 1) {
+          goToLearn(state.currentStage + 1);
+          return;
+        }
+
+        if (allQuizzesCorrect()) {
+          const bonusEl = document.querySelector('.final-subtext');
+          if (bonusEl && state.safetyBonusPoints > 0) {
+            bonusEl.innerHTML =
+              '현장의 영웅 김반장님! 7단계 14문제를 모두 맞히고<br />' +
+              '<span class="text-red-700 font-bold">유튜브 구독 보너스 안전 점수 10점</span>까지 챙기셨습니다!<br />' +
+              '모든 대원을 무사히 퇴근시키셨습니다. 오늘 현장도 <strong class="text-emerald-700">안전 패스</strong>!';
+          }
+          showScreen('final');
+          announce('대한민국 1등 명예 안전소장 등극!');
+        } else {
+          const wrongCount = countWrongAnswers();
+          $('incomplete-message').textContent =
+            `7단계·총 ${TOTAL_QUIZZES}문제를 마쳤지만, ${wrongCount}개 문제를 다시 공부해야 합니다. 눈도장 공부방부터 천천히 다시 도전해 보세요!`;
+          showScreen('incomplete');
+        }
+      }
+
+      function restartGame() {
+        hideResultPopup();
+        startGame(true);
+      }
+
+      function isYoutubeMissionDone() {
+        return (
+          youtubeMission.completed ||
+          localStorage.getItem(YOUTUBE_MISSION_KEY) === 'done'
+        );
+      }
+
+      function switchStartTab(tabId) {
+        const isSubscribe = tabId === 'subscribe';
+        const tabSub = $('tab-subscribe');
+        const tabDirect = $('tab-direct');
+        const panelSub = $('panel-subscribe');
+        const panelDirect = $('panel-direct');
+
+        if (tabSub && tabDirect && panelSub && panelDirect) {
+          tabSub.classList.toggle('active', isSubscribe);
+          tabDirect.classList.toggle('active', !isSubscribe);
+          tabSub.setAttribute('aria-selected', isSubscribe ? 'true' : 'false');
+          tabDirect.setAttribute('aria-selected', isSubscribe ? 'false' : 'true');
+          panelSub.classList.toggle('active', isSubscribe);
+          panelDirect.classList.toggle('active', !isSubscribe);
+          panelSub.hidden = !isSubscribe;
+          panelDirect.hidden = isSubscribe;
+        }
+      }
+
+      function renderYoutubeMissionUI() {
+        const subBtn = $('btn-youtube-subscribe');
+        const status = $('youtube-mission-status');
+        const hint = $('subscribe-start-hint');
+        if (!subBtn || !status) return;
+
+        if (isYoutubeMissionDone()) {
+          youtubeMission.completed = true;
+          subBtn.textContent = '확인 완료! 👍';
+          subBtn.classList.add('btn-youtube-done');
+          subBtn.disabled = true;
+          subBtn.setAttribute('aria-disabled', 'true');
+          status.textContent = '✅ 안전 점수 10점 획득!';
+          status.className = 'text-center text-lg font-bold text-emerald-700 mt-3 tts-readable';
+          if (hint) hint.textContent = '보너스 적용 완료! 아래 버튼으로 게임을 시작하세요.';
+          return;
+        }
+
+        subBtn.textContent = '📺 안전파수꾼제로미 유튜브 구독하기';
+        subBtn.classList.remove('btn-youtube-done');
+        subBtn.disabled = false;
+        subBtn.removeAttribute('aria-disabled');
+        if (youtubeMission.pendingReturn) {
+          status.textContent = '유튜브 확인 후 [구독하고 게임 시작하기]를 눌러 주세요.';
+        } else {
+          status.textContent = '';
+        }
+        if (hint) hint.textContent = '유튜브 구독 확인 후 시작하시면 보너스 10점!';
+      }
+
+      function completeYoutubeMission() {
+        if (isYoutubeMissionDone()) return;
+        youtubeMission.completed = true;
+        youtubeMission.pendingReturn = false;
+        localStorage.setItem(YOUTUBE_MISSION_KEY, 'done');
+        renderYoutubeMissionUI();
+        announce('확인 완료! 안전 점수 10점을 획득했습니다. [구독하고 게임 시작하기]를 눌러 주세요.');
+      }
+
+      function openYoutubeChannel() {
+        if (youtubeMission.pendingReturn && !isYoutubeMissionDone()) {
+          completeYoutubeMission();
+          return;
+        }
+        const opened = window.open(YOUTUBE_CHANNEL_URL, '_blank', 'noopener,noreferrer');
+        youtubeMission.pendingReturn = true;
+        const subBtn = $('btn-youtube-subscribe');
+        if (subBtn) {
+          subBtn.textContent = '돌아오셨나요? 확인 완료 👍';
+        }
+        const status = $('youtube-mission-status');
+        if (status) {
+          status.textContent = opened
+            ? '유튜브 창을 보신 뒤, 이 화면으로 돌아오거나 위 버튼을 다시 눌러 주세요.'
+            : '팝업이 막혔을 수 있습니다. 다시 누르거나 채널 보신 뒤 [확인 완료]를 눌러 주세요.';
+        }
+        announce('유튜브 채널이 새 창에서 열렸습니다. 확인 후 이 화면으로 돌아와 주세요.');
+      }
+
+      function onWindowReturnFocus() {
+        if (youtubeMission.pendingReturn && !isYoutubeMissionDone()) {
+          completeYoutubeMission();
+        }
+      }
+
+      function startWithSubscribePath() {
+        if (!isYoutubeMissionDone()) {
+          openYoutubeChannel();
+          announce('유튜브 구독 후 돌아오시면 보너스 10점과 함께 게임을 시작할 수 있습니다.');
+          return;
+        }
+        state.safetyBonusPoints = 10;
+        startGame(false);
+      }
+
+      function initStartTabs() {
+        $('tab-subscribe')?.addEventListener('click', () => switchStartTab('subscribe'));
+        $('tab-direct')?.addEventListener('click', () => switchStartTab('direct'));
+        $('btn-start-direct')?.addEventListener('click', () => {
+          state.safetyBonusPoints = 0;
+          startGame(false);
+        });
+        $('btn-start-with-subscribe')?.addEventListener('click', startWithSubscribePath);
+      }
+
+      function initYoutubeMission() {
+        renderYoutubeMissionUI();
+        $('btn-youtube-subscribe')?.addEventListener('click', openYoutubeChannel);
+        window.addEventListener('focus', onWindowReturnFocus);
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible') {
+            onWindowReturnFocus();
+          }
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        applyQuizSet(getStoredQuizSetIndex());
+        initStartTabs();
+        initYoutubeMission();
+
+        $('btn-to-quiz').addEventListener('click', () => {
+          state.currentQuizIndex = 0;
+          renderQuiz();
+          showScreen('quiz');
+        });
+
+        $('btn-choice-pass').addEventListener('click', () => handleQuizChoice('pass'));
+        $('btn-choice-fix').addEventListener('click', () => handleQuizChoice('fix'));
+
+        $('btn-next-stage').addEventListener('click', advanceAfterResult);
+
+        $('btn-restart').addEventListener('click', restartGame);
+        $('btn-retry-all').addEventListener('click', restartGame);
+
+        showScreen('home');
+        renderYoutubeMissionUI();
+      });
+    </script>
+  </body>
+</html>

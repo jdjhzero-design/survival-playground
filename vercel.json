@@ -6,6 +6,8 @@
   "trailingSlash": false,
   "rewrites": [
     { "source": "/games/safehome", "destination": "/games/safehome/index.html" },
-    { "source": "/games/safehome/", "destination": "/games/safehome/index.html" }
+    { "source": "/games/safehome/", "destination": "/games/safehome/index.html" },
+    { "source": "/games/safetyrules7", "destination": "/games/safetyrules7/index.html" },
+    { "source": "/games/safetyrules7/", "destination": "/games/safetyrules7/index.html" }
   ]
 }
