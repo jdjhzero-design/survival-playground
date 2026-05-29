@@ -93,6 +93,13 @@
         box-shadow: 0 2px 0 #991b1b;
       }
 
+      a.btn-youtube {
+        display: block;
+        text-align: center;
+        text-decoration: none;
+        color: #fff;
+      }
+
       .btn-youtube-done {
         background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
         border-color: #15803d;
@@ -331,14 +338,16 @@
                   반장님! 작업 전 영상으로 먼저 배우는 <strong>'안전파수꾼 제로미'</strong> 유튜브를
                   구독하시면 <strong class="text-red-700">안전 점수 10점</strong>을 먼저 드립니다!
                 </p>
-                <button
-                  type="button"
+                <a
                   id="btn-youtube-subscribe"
+                  href="http://www.youtube.com/@withZeromi"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   class="btn-youtube w-full rounded-2xl py-4 px-4 text-xl sm:text-2xl font-bold tts-readable"
                   aria-label="안전파수꾼제로미 유튜브 구독하기, 새 창"
                 >
                   📺 안전파수꾼제로미 유튜브 구독하기
-                </button>
+                </a>
                 <p
                   id="youtube-mission-status"
                   class="text-center text-lg font-bold text-stone-500 mt-3 tts-readable"
@@ -551,7 +560,7 @@
           </p>
           <a
             id="btn-youtube-final"
-            href="https://www.youtube.com/@withZeromi"
+            href="http://www.youtube.com/@withZeromi"
             target="_blank"
             rel="noopener noreferrer"
             class="btn-youtube inline-block w-full rounded-2xl py-5 px-6 text-btn-main text-xl sm:text-2xl font-bold tts-readable mb-4 no-underline"
@@ -609,7 +618,7 @@
        */
       const PLAYTHROUGH_KEY = 'safetyrules7_quiz_set';
       const YOUTUBE_MISSION_KEY = 'safetyrules7_youtube_mission';
-      const YOUTUBE_CHANNEL_URL = 'https://www.youtube.com/@withZeromi';
+      const YOUTUBE_CHANNEL_URL = 'http://www.youtube.com/@withZeromi';
 
       const youtubeMission = {
         pendingReturn: false,
@@ -982,7 +991,8 @@
           youtubeMission.completed = true;
           subBtn.textContent = '확인 완료! 👍';
           subBtn.classList.add('btn-youtube-done');
-          subBtn.disabled = true;
+          subBtn.removeAttribute('href');
+          subBtn.removeAttribute('target');
           subBtn.setAttribute('aria-disabled', 'true');
           status.textContent = '✅ 안전 점수 10점 획득!';
           status.className = 'text-center text-lg font-bold text-emerald-700 mt-3 tts-readable';
@@ -990,12 +1000,16 @@
           return;
         }
 
-        subBtn.textContent = '📺 안전파수꾼제로미 유튜브 구독하기';
+        subBtn.textContent = youtubeMission.pendingReturn
+          ? '돌아오셨나요? 확인 완료 👍'
+          : '📺 안전파수꾼제로미 유튜브 구독하기';
         subBtn.classList.remove('btn-youtube-done');
-        subBtn.disabled = false;
+        subBtn.href = YOUTUBE_CHANNEL_URL;
+        subBtn.target = '_blank';
         subBtn.removeAttribute('aria-disabled');
         if (youtubeMission.pendingReturn) {
-          status.textContent = '유튜브 확인 후 [구독하고 게임 시작하기]를 눌러 주세요.';
+          status.textContent =
+            '유튜브 채널을 보신 뒤, 위 버튼을 다시 누르거나 [구독하고 게임 시작하기]를 눌러 주세요.';
         } else {
           status.textContent = '';
         }
@@ -1011,24 +1025,32 @@
         announce('확인 완료! 안전 점수 10점을 획득했습니다. [구독하고 게임 시작하기]를 눌러 주세요.');
       }
 
-      function openYoutubeChannel() {
-        if (youtubeMission.pendingReturn && !isYoutubeMissionDone()) {
+      function openYoutubeChannelInNewTab() {
+        const opened = window.open(YOUTUBE_CHANNEL_URL, '_blank', 'noopener,noreferrer');
+        if (!opened) {
+          const fallback = document.createElement('a');
+          fallback.href = YOUTUBE_CHANNEL_URL;
+          fallback.target = '_blank';
+          fallback.rel = 'noopener noreferrer';
+          document.body.appendChild(fallback);
+          fallback.click();
+          fallback.remove();
+        }
+      }
+
+      function onYoutubeSubscribeClick(e) {
+        if (isYoutubeMissionDone()) {
+          e.preventDefault();
+          return;
+        }
+        if (youtubeMission.pendingReturn) {
+          e.preventDefault();
           completeYoutubeMission();
           return;
         }
-        const opened = window.open(YOUTUBE_CHANNEL_URL, '_blank', 'noopener,noreferrer');
         youtubeMission.pendingReturn = true;
-        const subBtn = $('btn-youtube-subscribe');
-        if (subBtn) {
-          subBtn.textContent = '돌아오셨나요? 확인 완료 👍';
-        }
-        const status = $('youtube-mission-status');
-        if (status) {
-          status.textContent = opened
-            ? '유튜브 창을 보신 뒤, 이 화면으로 돌아오거나 위 버튼을 다시 눌러 주세요.'
-            : '팝업이 막혔을 수 있습니다. 다시 누르거나 채널 보신 뒤 [확인 완료]를 눌러 주세요.';
-        }
-        announce('유튜브 채널이 새 창에서 열렸습니다. 확인 후 이 화면으로 돌아와 주세요.');
+        renderYoutubeMissionUI();
+        announce('유튜브 채널로 이동합니다. 확인 후 이 화면으로 돌아와 주세요.');
       }
 
       function onWindowReturnFocus() {
@@ -1039,7 +1061,9 @@
 
       function startWithSubscribePath() {
         if (!isYoutubeMissionDone()) {
-          openYoutubeChannel();
+          openYoutubeChannelInNewTab();
+          youtubeMission.pendingReturn = true;
+          renderYoutubeMissionUI();
           announce('유튜브 구독 후 돌아오시면 보너스 10점과 함께 게임을 시작할 수 있습니다.');
           return;
         }
@@ -1059,7 +1083,7 @@
 
       function initYoutubeMission() {
         renderYoutubeMissionUI();
-        $('btn-youtube-subscribe')?.addEventListener('click', openYoutubeChannel);
+        $('btn-youtube-subscribe')?.addEventListener('click', onYoutubeSubscribeClick);
         window.addEventListener('focus', onWindowReturnFocus);
         document.addEventListener('visibilitychange', () => {
           if (document.visibilityState === 'visible') {
