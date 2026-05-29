@@ -140,6 +140,25 @@
         }
       }
 
+      .start-tab-long {
+        font-size: 0.72rem;
+        line-height: 1.4;
+        padding: 0.65rem 0.35rem;
+      }
+
+      @media (min-width: 480px) {
+        .start-tab-long {
+          font-size: 0.82rem;
+          padding: 0.75rem 0.4rem;
+        }
+      }
+
+      @media (min-width: 640px) {
+        .start-tab-long {
+          font-size: 0.9rem;
+        }
+      }
+
       .start-tab.active {
         background: #fff;
         color: #1c1917;
@@ -276,12 +295,13 @@
               <button
                 type="button"
                 id="tab-subscribe"
-                class="start-tab tts-readable"
+                class="start-tab start-tab-long tts-readable"
                 role="tab"
                 aria-selected="false"
                 aria-controls="panel-subscribe"
+                aria-label="강남구 중대재해예방 지식채널 안전파수꾼제로미 유튜브 구독하고 게임하기"
               >
-                📺 구독하고<br />게임하기
+                📺 강남구 중대재해예방<br />지식채널 안전파수꾼제로미<br />유튜브 구독하고 게임하기
               </button>
               <button
                 type="button"
