@@ -146,7 +146,8 @@
 
     const url = card.dataset.gameUrl;
     if (url) {
-      window.open(url, "_blank", "noopener,noreferrer");
+      const absolute = new URL(url, window.location.href).href;
+      window.open(absolute, "_blank", "noopener,noreferrer");
     }
   }
 
