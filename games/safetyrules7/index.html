@@ -4,8 +4,14 @@
     <meta charset="UTF-8" />
     <script>
       (function () {
-        var path = window.location.pathname;
-        var base = path.endsWith('/') ? path : path.replace(/[^/]+$/, '');
+        var path = window.location.pathname || '/';
+        var last = path.split('/').pop() || '';
+        var base;
+        if (last && last.indexOf('.') !== -1) {
+          base = path.replace(/[^/]+$/, '');
+        } else {
+          base = path.endsWith('/') ? path : path + '/';
+        }
         if (!base.endsWith('/')) base += '/';
         var el = document.createElement('base');
         el.href = base;
