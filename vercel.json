@@ -4,22 +4,8 @@
   "outputDirectory": ".",
   "cleanUrls": true,
   "trailingSlash": false,
-  "redirects": [
-    {
-      "source": "/games/safetyrules7",
-      "destination": "/games/safetyrules7/",
-      "permanent": false
-    },
-    {
-      "source": "/games/safehome",
-      "destination": "/games/safehome/",
-      "permanent": false
-    }
-  ],
   "rewrites": [
     { "source": "/games/safehome", "destination": "/games/safehome/index.html" },
-    { "source": "/games/safehome/", "destination": "/games/safehome/index.html" },
-    { "source": "/games/safetyrules7", "destination": "/games/safetyrules7/index.html" },
-    { "source": "/games/safetyrules7/", "destination": "/games/safetyrules7/index.html" }
+    { "source": "/games/safetyrules7", "destination": "/games/safetyrules7/index.html" }
   ]
 }
