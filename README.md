@@ -9,6 +9,7 @@
 | 안전 패스 퀘스트 (7대 수칙) | `/games/safetyrules7/` |
 | 나의 안전 성향 테스트 | 외부 링크 |
 | 폭염 타파! 안전한 퇴근길 | `/games/safehome/` |
+| 나의 공무원상 유형 테스트 | `/games/governmentofficer/` |
 
 ## 배포 URL
 
