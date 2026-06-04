@@ -276,6 +276,127 @@
         transform: scale(1.25);
       }
 
+      .stage-dots .dot.cleared {
+        background: #059669;
+        border-color: #047857;
+      }
+
+      .select-progress-bar {
+        height: 14px;
+        background: #e7e5e4;
+        border-radius: 99px;
+        overflow: hidden;
+        margin-bottom: 0.5rem;
+      }
+
+      .select-progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #059669, #10b981);
+        border-radius: 99px;
+        transition: width 0.4s ease;
+      }
+
+      .stage-select-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+      }
+
+      @media (min-width: 480px) {
+        .stage-select-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      .stage-select-card {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        text-align: left;
+        padding: 1rem 1.1rem;
+        background: #fff;
+        border: 3px solid #d6d3d1;
+        border-radius: 1rem;
+        cursor: pointer;
+        font-family: inherit;
+        transition: border-color 0.15s, transform 0.15s;
+        width: 100%;
+      }
+
+      .stage-select-card:hover {
+        border-color: #f59e0b;
+        transform: translateY(-2px);
+      }
+
+      .stage-select-card.cleared {
+        border-color: #059669;
+        background: #ecfdf5;
+      }
+
+      .stage-select-icon {
+        font-size: 2rem;
+        flex-shrink: 0;
+        width: 3rem;
+        text-align: center;
+      }
+
+      .stage-select-info {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .stage-select-info strong {
+        display: block;
+        font-size: 1.05rem;
+        color: #1c1917;
+        margin-bottom: 0.2rem;
+      }
+
+      .stage-select-info span {
+        font-size: 0.9rem;
+        color: #57534e;
+      }
+
+      .stage-select-badge {
+        font-size: 0.8rem;
+        font-weight: 700;
+        padding: 0.25rem 0.5rem;
+        border-radius: 6px;
+        flex-shrink: 0;
+      }
+
+      .stage-select-badge.done {
+        background: #059669;
+        color: #fff;
+      }
+
+      .stage-select-badge.todo {
+        background: #fef3c7;
+        color: #b45309;
+      }
+
+      .btn-secondary-outline {
+        background: #fff;
+        color: #57534e;
+        border: 3px solid #d6d3d1;
+        box-shadow: 0 4px 0 #d6d3d1;
+      }
+
+      .btn-secondary-outline:active {
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 #d6d3d1;
+      }
+
+      .honor-ready-banner {
+        background: linear-gradient(135deg, #fef3c7, #fde68a);
+        border: 3px solid #f59e0b;
+        border-radius: 1rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        text-align: center;
+      }
+
       @media (min-width: 640px) {
         .text-title-main {
           font-size: 2.25rem;
@@ -307,7 +428,10 @@
             안전 패스 퀘스트
           </h1>
           <p class="text-body-main text-xl sm:text-2xl text-stone-600 mb-4 tts-readable leading-relaxed">
-            7단계 현장 안전 수칙을<br />눈도장 공부하고 단계별 퀴즈 2문제에 도전하세요!
+            7가지 안전 수칙 중<br />원하는 것부터 골라 도전하세요!
+          </p>
+          <p class="text-lg text-emerald-800 font-semibold mb-4 tts-readable">
+            7개 모두 완료하면 🏆 명예 안전소장 등극!
           </p>
           <p class="text-lg sm:text-xl text-amber-800 font-semibold mb-6 tts-readable">
             ↺ 처음부터 다시하기를 누르면 다른 문제 세트로 바뀝니다
@@ -390,18 +514,70 @@
               aria-labelledby="tab-direct"
             >
               <p class="text-body-main text-xl sm:text-2xl text-stone-600 mb-6 tts-readable leading-relaxed">
-                구독 없이 바로<br />안전 퀴즈에 도전합니다!
+                원하는 안전 수칙을 골라<br />학습하고 퀴즈에 도전합니다!
               </p>
               <button
                 type="button"
                 id="btn-start-direct"
                 class="btn-primary-action w-full rounded-2xl py-5 px-6 text-2xl sm:text-3xl font-bold tts-readable"
-                aria-label="그냥 게임하기, 바로 시작"
+                aria-label="수칙 선택하러 가기"
               >
-                ▶ 바로 게임 시작하기
+                ▶ 수칙 선택하러 가기
               </button>
             </div>
           </div>
+        </div>
+      </section>
+
+      <!-- ===== 수칙 선택 화면 ===== -->
+      <section
+        id="screen-select"
+        class="screen-panel"
+        role="main"
+        aria-label="안전 수칙 선택 화면"
+      >
+        <div class="bg-white rounded-3xl shadow-xl border-4 border-amber-200 p-6 sm:p-8">
+          <header class="text-center mb-6">
+            <h2 class="text-title-main text-2xl sm:text-3xl font-extrabold text-ink mb-2 tts-readable">
+              🛡️ 7대 안전 수칙 선택
+            </h2>
+            <p class="text-body-main text-lg sm:text-xl text-stone-600 tts-readable">
+              배우고 싶은 수칙을 골라 주세요. 순서는 자유입니다!
+            </p>
+          </header>
+
+          <div class="mb-6">
+            <div class="flex justify-between text-lg font-bold text-stone-700 mb-2 tts-readable">
+              <span>완료 현황</span>
+              <span id="select-progress-text">0 / 7</span>
+            </div>
+            <div class="select-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="7">
+              <div id="select-progress-fill" class="select-progress-fill" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <div id="honor-ready-banner" class="honor-ready-banner hidden tts-readable">
+            <p class="text-xl font-bold text-amber-900 mb-3">
+              🎉 7개 수칙을 모두 마스터했습니다!
+            </p>
+            <button
+              type="button"
+              id="btn-claim-honor"
+              class="btn-primary-action w-full rounded-2xl py-4 px-6 text-xl font-bold"
+            >
+              🏆 명예 안전소장 등극 확인
+            </button>
+          </div>
+
+          <div id="stage-select-grid" class="stage-select-grid" role="list"></div>
+
+          <button
+            type="button"
+            id="btn-back-home"
+            class="btn-secondary-outline w-full rounded-2xl py-4 px-6 text-xl font-bold tts-readable mt-2"
+          >
+            ← 처음 화면으로
+          </button>
         </div>
       </section>
 
@@ -442,14 +618,23 @@
           ></ul>
         </div>
 
-        <button
-          type="button"
-          id="btn-to-quiz"
-          class="btn-primary-action w-full rounded-2xl py-5 px-6 text-btn-main text-2xl sm:text-3xl font-bold tts-readable"
-          aria-label="이해했습니다, 퀴즈 도전하기"
-        >
-          이해했습니다! 퀴즈 도전하기 →
-        </button>
+        <div class="flex flex-col gap-3">
+          <button
+            type="button"
+            id="btn-to-quiz"
+            class="btn-primary-action w-full rounded-2xl py-5 px-6 text-btn-main text-2xl sm:text-3xl font-bold tts-readable"
+            aria-label="이해했습니다, 퀴즈 도전하기"
+          >
+            이해했습니다! 퀴즈 도전하기 →
+          </button>
+          <button
+            type="button"
+            id="btn-back-select"
+            class="btn-secondary-outline w-full rounded-2xl py-4 px-6 text-xl font-bold tts-readable"
+          >
+            ← 수칙 선택으로 돌아가기
+          </button>
+        </div>
       </section>
 
       <!-- ===== 퀴즈 화면: 실전 패스 퀴즈 ===== -->
@@ -633,6 +818,7 @@
        * 단계당 퀴즈 2문제(기본 + 심화), 재시작 시 문제 세트 교체
        */
       const PLAYTHROUGH_KEY = 'safetyrules7_quiz_set';
+      const PROGRESS_KEY = 'safetyrules7_stage_progress';
       const YOUTUBE_MISSION_KEY = 'safetyrules7_youtube_mission';
       const YOUTUBE_CHANNEL_URL = 'http://www.youtube.com/@withZeromi';
 
@@ -644,6 +830,8 @@
         {
           id: 1,
           label: '1단계',
+          icon: '📋',
+          shortTitle: 'TBM',
           title: '아침을 여는 10분 (TBM)',
           learn: [
             '① 오늘 할 일 범위 확인',
@@ -656,6 +844,8 @@
         {
           id: 2,
           label: '2단계',
+          icon: '🪢',
+          shortTitle: '달비계',
           title: '하늘 위 안전선 (달비계)',
           learn: [
             '① 반드시 견고한 고정점 \'2개소 이상\'에 분리 결속',
@@ -667,6 +857,8 @@
         {
           id: 3,
           label: '3단계',
+          icon: '⛽',
+          shortTitle: '밀폐공간',
           title: '맑은 공기 사수 (밀폐공간)',
           learn: [
             '① 들어가기 전 산소(18%~23.5% 미만) 및 유해가스 농도 측정',
@@ -677,6 +869,8 @@
         {
           id: 4,
           label: '4단계',
+          icon: '🏠',
+          shortTitle: '지붕수리',
           title: '지붕 위 생명길 (지붕수리)',
           learn: [
             '① 고소작업대 등을 활용해 지붕 밑에서 작업할 수 있는지 먼저 확인',
@@ -688,6 +882,8 @@
         {
           id: 5,
           label: '5단계',
+          icon: '🌡️',
+          shortTitle: '온열질환',
           title: '폭염 타파! (온열질환)',
           learn: [
             '① 시원하고 깨끗한 물과 보냉장구 상시 지급',
@@ -699,6 +895,8 @@
         {
           id: 6,
           label: '6단계',
+          icon: '🪜',
+          shortTitle: '이동식 사다리',
           title: '올바른 디딤발 (이동식 사다리)',
           learn: [
             '① 고소작업대 설치가 어려운 협소한 장소에서만 사용',
@@ -711,6 +909,8 @@
         {
           id: 7,
           label: '7단계',
+          icon: '🌿',
+          shortTitle: '예초기',
           title: '15미터 세이프존 (예초기)',
           learn: [
             '① 사전에 돌, 이물질 제거 및 날 손상 점검',
@@ -752,7 +952,46 @@
       function rotateQuizSetForRestart() {
         const next = (getStoredQuizSetIndex() + 1) % QUIZ_SETS.length;
         localStorage.setItem(PLAYTHROUGH_KEY, String(next));
+        localStorage.removeItem(PROGRESS_KEY);
         return applyQuizSet(next);
+      }
+
+      function createEmptyQuizResults() {
+        return STAGE_DEFS.map(() => [null, null]);
+      }
+
+      function loadProgress() {
+        try {
+          const raw = localStorage.getItem(PROGRESS_KEY);
+          if (!raw) return createEmptyQuizResults();
+          const parsed = JSON.parse(raw);
+          if (!Array.isArray(parsed) || parsed.length !== STAGE_DEFS.length) {
+            return createEmptyQuizResults();
+          }
+          return parsed.map((row) => {
+            if (!Array.isArray(row) || row.length !== 2) return [null, null];
+            return [row[0] === true ? true : row[0] === false ? false : null, row[1] === true ? true : row[1] === false ? false : null];
+          });
+        } catch {
+          return createEmptyQuizResults();
+        }
+      }
+
+      function saveProgress() {
+        localStorage.setItem(PROGRESS_KEY, JSON.stringify(state.quizResults));
+      }
+
+      function isStageCleared(stageIndex) {
+        const row = state.quizResults[stageIndex];
+        return row && row[0] === true && row[1] === true;
+      }
+
+      function countClearedStages() {
+        return STAGE_DEFS.reduce((n, _, i) => n + (isStageCleared(i) ? 1 : 0), 0);
+      }
+
+      function allStagesCleared() {
+        return countClearedStages() === STAGE_DEFS.length;
       }
 
       const state = {
@@ -793,16 +1032,67 @@
         const dots = $('stage-dots');
         dots.innerHTML = STAGES.map((_, i) => {
           let cls = 'dot';
-          if (i < state.currentStage) cls += ' done';
+          if (isStageCleared(i)) cls += ' cleared';
           if (i === state.currentStage) cls += ' current';
           return `<span class="${cls}" aria-hidden="true"></span>`;
         }).join('');
-        dots.setAttribute(
-          'aria-valuenow',
-          String(state.currentStage + 1)
-        );
+        dots.setAttribute('aria-valuenow', String(state.currentStage + 1));
         dots.setAttribute('aria-valuemin', '1');
         dots.setAttribute('aria-valuemax', '7');
+      }
+
+      function renderSelectScreen() {
+        const cleared = countClearedStages();
+        const total = STAGE_DEFS.length;
+        const pct = Math.round((cleared / total) * 100);
+
+        $('select-progress-text').textContent = `${cleared} / ${total}`;
+        $('select-progress-fill').style.width = `${pct}%`;
+        $('select-progress-fill').parentElement.setAttribute('aria-valuenow', String(cleared));
+
+        const banner = $('honor-ready-banner');
+        if (allStagesCleared()) {
+          banner.classList.remove('hidden');
+        } else {
+          banner.classList.add('hidden');
+        }
+
+        $('stage-select-grid').innerHTML = STAGE_DEFS.map((def, i) => {
+          const done = isStageCleared(i);
+          return `
+            <button
+              type="button"
+              class="stage-select-card tts-readable ${done ? 'cleared' : ''}"
+              data-stage-index="${i}"
+              role="listitem"
+              aria-label="${def.label} ${def.title}${done ? ', 완료' : ', 미완료'}"
+            >
+              <span class="stage-select-icon" aria-hidden="true">${def.icon}</span>
+              <div class="stage-select-info">
+                <strong>${def.label} ${def.shortTitle}</strong>
+                <span>${def.title}</span>
+              </div>
+              <span class="stage-select-badge ${done ? 'done' : 'todo'}">${done ? '완료 ✓' : '도전'}</span>
+            </button>
+          `;
+        }).join('');
+
+        announce(`안전 수칙 선택 화면입니다. ${cleared}개 완료, ${total - cleared}개 남았습니다.`);
+      }
+
+      function goToSelectScreen() {
+        saveProgress();
+        renderSelectScreen();
+        showScreen('select');
+      }
+
+      function beginStage(stageIndex) {
+        state.currentStage = stageIndex;
+        state.currentQuizIndex = 0;
+        if (!isStageCleared(stageIndex)) {
+          state.quizResults[stageIndex] = [null, null];
+        }
+        goToLearn(stageIndex);
       }
 
       function renderLearn() {
@@ -872,15 +1162,14 @@
 
         $('result-explanation').textContent = quiz.explanation;
 
-        const isLastStage = state.currentStage >= STAGES.length - 1;
         const isLastQuizInStage = state.currentQuizIndex >= 1;
 
         if (!isLastQuizInStage) {
           $('btn-next-stage').textContent = '심화 문제 도전하기 →';
-        } else if (!isLastStage) {
-          $('btn-next-stage').textContent = '다음 단계로 가기 →';
+        } else if (isStageCleared(state.currentStage) && allStagesCleared()) {
+          $('btn-next-stage').textContent = '🏆 명예 안전소장 등극 확인 →';
         } else {
-          $('btn-next-stage').textContent = '결과 확인하기 →';
+          $('btn-next-stage').textContent = '← 수칙 선택으로 돌아가기';
         }
 
         popup.classList.add('show');
@@ -903,14 +1192,15 @@
       function startGame(useNextSet) {
         if (useNextSet) {
           const setIdx = rotateQuizSetForRestart();
+          state.quizResults = createEmptyQuizResults();
           announce(`새로운 문제 세트 ${String.fromCharCode(65 + setIdx)}로 시작합니다.`);
         } else {
           applyQuizSet(getStoredQuizSetIndex());
+          state.quizResults = loadProgress();
         }
         state.currentStage = 0;
         state.currentQuizIndex = 0;
-        state.quizResults = STAGE_DEFS.map(() => [null, null]);
-        goToLearn(0);
+        goToSelectScreen();
       }
 
       function handleQuizChoice(choice) {
@@ -933,6 +1223,18 @@
         return state.quizResults.every((stageRes) => stageRes.every((r) => r === true));
       }
 
+      function showHonorFinal() {
+        const bonusEl = document.querySelector('.final-subtext');
+        if (bonusEl && state.safetyBonusPoints > 0) {
+          bonusEl.innerHTML =
+            '현장의 영웅 김반장님! 7가지 안전 수칙을 모두 마스터하고<br />' +
+            '<span class="text-red-700 font-bold">유튜브 구독 보너스 안전 점수 10점</span>까지 챙기셨습니다!<br />' +
+            '모든 대원을 무사히 퇴근시키셨습니다. 오늘 현장도 <strong class="text-emerald-700">안전 패스</strong>!';
+        }
+        showScreen('final');
+        announce('대한민국 1등 명예 안전소장 등극!');
+      }
+
       function advanceAfterResult() {
         hideResultPopup();
 
@@ -943,31 +1245,19 @@
           return;
         }
 
-        if (state.currentStage < STAGES.length - 1) {
-          goToLearn(state.currentStage + 1);
+        saveProgress();
+
+        if (allStagesCleared()) {
+          showHonorFinal();
           return;
         }
 
-        if (allQuizzesCorrect()) {
-          const bonusEl = document.querySelector('.final-subtext');
-          if (bonusEl && state.safetyBonusPoints > 0) {
-            bonusEl.innerHTML =
-              '현장의 영웅 김반장님! 7단계 14문제를 모두 맞히고<br />' +
-              '<span class="text-red-700 font-bold">유튜브 구독 보너스 안전 점수 10점</span>까지 챙기셨습니다!<br />' +
-              '모든 대원을 무사히 퇴근시키셨습니다. 오늘 현장도 <strong class="text-emerald-700">안전 패스</strong>!';
-          }
-          showScreen('final');
-          announce('대한민국 1등 명예 안전소장 등극!');
-        } else {
-          const wrongCount = countWrongAnswers();
-          $('incomplete-message').textContent =
-            `7단계·총 ${TOTAL_QUIZZES}문제를 마쳤지만, ${wrongCount}개 문제를 다시 공부해야 합니다. 눈도장 공부방부터 천천히 다시 도전해 보세요!`;
-          showScreen('incomplete');
-        }
+        goToSelectScreen();
       }
 
       function restartGame() {
         hideResultPopup();
+        state.safetyBonusPoints = 0;
         startGame(true);
       }
 
@@ -1126,6 +1416,27 @@
 
         $('btn-restart').addEventListener('click', restartGame);
         $('btn-retry-all').addEventListener('click', restartGame);
+
+        $('btn-back-home').addEventListener('click', () => {
+          saveProgress();
+          showScreen('home');
+        });
+
+        $('btn-back-select').addEventListener('click', goToSelectScreen);
+
+        $('stage-select-grid').addEventListener('click', (e) => {
+          const card = e.target.closest('.stage-select-card');
+          if (!card) return;
+          beginStage(parseInt(card.dataset.stageIndex, 10));
+        });
+
+        $('btn-claim-honor').addEventListener('click', () => {
+          if (allStagesCleared()) {
+            showHonorFinal();
+          } else {
+            announce('7개 수칙을 모두 완료해야 명예 안전소장에 등극할 수 있습니다.');
+          }
+        });
 
         showScreen('home');
         renderYoutubeMissionUI();
